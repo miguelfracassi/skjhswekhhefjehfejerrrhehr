@@ -1,0 +1,140 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bup</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Pinyon+Script&family=Silkscreen:wght@400;700&display=swap"><link rel="stylesheet" href="style.css">
+<style>
+@property --c1{syntax:'<color>';inherits:true;initial-value:#ffe066}
+@property --c2{syntax:'<color>';inherits:true;initial-value:#ffa62b}
+.page.w{max-width:1100px;padding-bottom:60px}.page.w h1{margin-bottom:22px}
+.wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:22px;height:min(76vh,660px);min-height:500px}
+.stage{position:relative;overflow:hidden;display:grid;place-items:center;border-radius:40px;background:#ffe6c4;transition:background .6s}
+.stage .fl{z-index:0}
+.wrap[data-mood=bravo] .stage{background:#ffcfc7}.wrap[data-mood=dormindo] .stage{background:#c9d6f5}
+.wrap[data-mood=triste] .stage{background:#dfe5f1}.wrap[data-mood=amando] .stage{background:#ffd3e8}
+.wrap[data-mood=surpreso] .stage{background:#dff3cf}.wrap[data-mood=pensando] .stage{background:#e6dcff}
+.wrap[data-mood=rindo] .stage{background:#fff0a8}
+.pet{all:unset;box-sizing:border-box;position:relative;z-index:1;display:block;width:min(340px,72%);cursor:pointer;filter:drop-shadow(0 22px 34px #0003);--c1:#ffe066;--c2:#ffa62b;transition:--c1 .5s,--c2 .5s}
+.pet:focus-visible{outline:3px solid var(--b);outline-offset:6px;border-radius:50%}
+.pet svg{width:100%;display:block;overflow:visible;animation:b-bob 3s ease-in-out infinite}
+.wrap[data-mood=bravo] .pet{--c1:#ff9a7a;--c2:#e5342b}.wrap[data-mood=dormindo] .pet{--c1:#ffeab0;--c2:#e8b65c}
+.wrap[data-mood=triste] .pet{--c1:#d6e6ff;--c2:#8aa8e8}.wrap[data-mood=amando] .pet{--c1:#ffd3e8;--c2:#ff7ab8}
+.wrap[data-mood=bravo] svg{animation:b-shake .35s linear infinite}.wrap[data-mood=dormindo] svg{animation:b-breathe 4s ease-in-out infinite}
+.wrap[data-mood=triste] svg{animation:b-sink 3s ease-in-out infinite}.wrap[data-mood=amando] svg{animation:b-beat .9s ease-in-out infinite}
+.wrap[data-mood=surpreso] svg{animation:b-pop .4s ease-out 1}.wrap[data-mood=rindo] svg{animation:b-jump .5s ease-in-out infinite}
+.wrap[data-mood=pensando] svg{animation:b-tilt 3s ease-in-out infinite}
+.x{opacity:0;transition:opacity .2s}.x.on{opacity:1}
+.z{opacity:0;animation:b-z 2.4s ease-in infinite}.z2{animation-delay:1.2s}.tear{animation:b-tear 2s ease-in infinite}
+@keyframes b-bob{50%{transform:translateY(-8px)}}@keyframes b-shake{25%{transform:translateX(-5px) rotate(-2deg)}75%{transform:translateX(5px) rotate(2deg)}}
+@keyframes b-breathe{50%{transform:scale(1.04)}}@keyframes b-sink{50%{transform:translateY(5px)}}@keyframes b-beat{40%{transform:scale(1.07)}}
+@keyframes b-pop{0%{transform:scale(.85)}60%{transform:scale(1.1)}}@keyframes b-jump{50%{transform:translateY(-16px) rotate(4deg)}}@keyframes b-tilt{50%{transform:rotate(4deg)}}
+@keyframes b-z{0%{opacity:0;transform:translate(0,8px)}30%{opacity:1}100%{opacity:0;transform:translate(6px,-14px)}}
+@keyframes b-tear{0%{opacity:0;transform:translateY(-4px)}30%{opacity:1}100%{opacity:0;transform:translateY(18px)}}
+.mood{position:absolute;z-index:1;left:50%;bottom:22px;transform:translateX(-50%);margin:0;padding:8px 20px;border-radius:999px;background:#fff;box-shadow:0 6px 20px #0002;font-weight:700;white-space:nowrap}
+.chat{display:grid;grid-template-rows:minmax(0,1fr) auto;min-height:0;overflow:hidden;background:#fff;border:2px solid var(--ink);border-radius:40px}
+#log{display:flex;flex-direction:column;gap:12px;overflow-y:auto;min-height:0;padding:26px 28px}
+#log>:first-child{margin-top:auto}
+.m{max-width:82%;padding:12px 18px;border-radius:22px;line-height:1.45;font-size:1.05rem;overflow-wrap:anywhere}
+.m.b{align-self:flex-start;background:#f1f1f5;border-bottom-left-radius:6px}
+.m.u{align-self:flex-end;background:var(--ink);color:#fff;border-bottom-right-radius:6px}
+.m.s{align-self:center;max-width:92%;background:none;color:#777;font-size:.85rem;text-align:center;padding:4px 8px}
+.m.dots{animation:b-dots 1s ease-in-out infinite}@keyframes b-dots{50%{opacity:.35}}
+.chat form{display:flex;gap:10px;margin:0;padding:16px 18px;border-top:2px solid var(--ink)}
+.chat input{flex:1;min-width:0;border-radius:999px;padding:15px 24px}
+.send{all:unset;flex:none;box-sizing:border-box;width:52px;height:52px;border-radius:50%;background:var(--ink);display:grid;place-items:center;cursor:pointer;transition:transform .2s}
+.send:hover{transform:scale(1.08)}.send svg{width:24px;height:24px}.send:focus-visible{outline:3px solid var(--b);outline-offset:3px}
+@media(max-width:820px){.wrap{grid-template-columns:1fr;grid-template-rows:270px auto;height:auto;min-height:0}.chat{height:min(62vh,520px)}.pet{width:min(190px,60%)}.mood{bottom:14px}#log{padding:18px}}
+</style></head><body>
+<main class="page w"><h1>Bup</h1>
+<div class="wrap" id="box" data-mood="feliz">
+<section class="stage">
+<svg class="fl" style="--w:84px;left:7%;top:9%;--d:1.8;--t:.3s;--r:-12deg" viewBox="0 0 80 80"><rect x="6" y="6" width="68" height="68" rx="10" fill="#ffd23f" stroke="#e0a800" stroke-width="4"/><text x="40" y="58" font-size="46" font-weight="700" text-anchor="middle" fill="#fff" font-family="Silkscreen">?</text></svg>
+<svg class="fl" style="--w:54px;right:9%;top:8%;--d:2;--t:.5s;--r:25deg" viewBox="0 0 60 60"><rect x="4" y="4" width="52" height="52" rx="10" fill="#fff" stroke="#ccc" stroke-width="2"/><g fill="#222"><circle cx="18" cy="18" r="4"/><circle cx="42" cy="42" r="4"/><circle cx="30" cy="30" r="4"/></g></svg>
+<svg class="fl" style="--w:72px;left:8%;bottom:20%;--d:2.4;--t:.7s" viewBox="0 0 80 60"><path d="M6 30l14-18-4 22 18-26-2 28 20-24-8 24 14-10" fill="none" stroke="#ff4fa3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<svg class="fl" style="--w:78px;right:8%;bottom:22%;--d:-1.6;--t:.9s" viewBox="0 0 100 100"><g fill="none" stroke="#161616" stroke-width="7" stroke-linecap="round"><circle cx="50" cy="50" r="42" stroke-dasharray="230 40"/><circle cx="50" cy="50" r="27"/><circle cx="50" cy="50" r="12"/></g></svg>
+<button class="pet" id="pet" type="button" aria-label="Fazer cócegas no Bup">
+<svg viewBox="-10 -10 140 140" aria-hidden="true"><defs><radialGradient id="bg" cx=".35" cy=".3"><stop offset="0" style="stop-color:var(--c1)"/><stop offset="1" style="stop-color:var(--c2)"/></radialGradient>
+<path id="h" d="M10 18C2 12 0 8 0 5a5 5 0 0 1 10-2 5 5 0 0 1 10 2c0 3-2 7-10 13z" fill="#e5195f"/></defs>
+<circle cx="60" cy="60" r="58" fill="#fff"/><circle cx="60" cy="60" r="52" fill="url(#bg)"/>
+<g fill="none" stroke="#3a2a1a" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+<g class="x feliz"><path d="M34 54q7-10 15 0M71 54q7-10 15 0M38 72q22 20 44 0"/></g>
+<g class="x bravo"><path d="M30 42l22 9M90 42l-22 9M42 90q18-16 36 0"/><circle cx="42" cy="62" r="4.5" fill="#3a2a1a" stroke="none"/><circle cx="78" cy="62" r="4.5" fill="#3a2a1a" stroke="none"/><path d="M92 22q6 0 6-6M104 22q-6 0-6-6M92 10q6 0 6 6M104 10q-6 0-6 6" stroke="#d32f2f" stroke-width="3"/></g>
+<g class="x dormindo"><path d="M32 58q8 7 16 0M72 58q8 7 16 0M52 80q8 5 16 0"/><path class="z" d="M94 30h9l-9 11h9" stroke-width="3"/><path class="z z2" d="M104 14h7l-7 9h7" stroke-width="2.5"/></g>
+<g class="x triste"><path d="M31 52l22-8M89 52l-22-8M44 88q16-13 32 0"/><circle cx="42" cy="62" r="4.5" fill="#3a2a1a" stroke="none"/><circle cx="78" cy="62" r="4.5" fill="#3a2a1a" stroke="none"/><path class="tear" d="M84 68q6 9 0 13q-6-4 0-13z" fill="#7fb4ff" stroke="none"/></g>
+<g class="x amando"><use href="#h" x="31" y="44"/><use href="#h" x="69" y="44"/><path d="M44 76q16 16 32 0"/><g fill="#ff7ab8" stroke="none" opacity=".6"><ellipse cx="26" cy="74" rx="7" ry="4"/><ellipse cx="94" cy="74" rx="7" ry="4"/></g></g>
+<g class="x surpreso"><circle cx="42" cy="56" r="8" fill="#fff" stroke-width="3"/><circle cx="78" cy="56" r="8" fill="#fff" stroke-width="3"/><circle cx="42" cy="56" r="3.5" fill="#3a2a1a" stroke="none"/><circle cx="78" cy="56" r="3.5" fill="#3a2a1a" stroke="none"/><path d="M32 38q10-6 20 0M68 38q10-6 20 0"/><ellipse cx="60" cy="88" rx="6" ry="8" fill="#3a2a1a"/></g>
+<g class="x rindo"><path d="M34 48l14 6-14 6M86 48l-14 6 14 6"/><path d="M36 70q24 2 48 0q-3 26-24 26t-24-26z" fill="#3a2a1a"/><path d="M48 90q12-9 24 0q-12 7-24 0z" fill="#ff7a8a" stroke="none"/></g>
+<g class="x pensando"><path d="M31 46h20M69 38q10-6 20 0M46 86q10-5 26-2"/><circle cx="44" cy="54" r="4.5" fill="#3a2a1a" stroke="none"/><circle cx="80" cy="50" r="4.5" fill="#3a2a1a" stroke="none"/><g fill="#fff" stroke-width="2.5"><circle cx="98" cy="20" r="3"/><circle cx="107" cy="9" r="4.5"/><circle cx="118" cy="-3" r="6.5"/></g></g>
+</g></svg></button>
+<p class="mood" id="mood">Bup está feliz</p>
+</section>
+<section class="chat"><div id="log" class="scroll" role="log" aria-live="polite"></div>
+<form id="f" autocomplete="off"><input id="t" maxlength="300" placeholder="Elogie, xingue ou mande o Bup dormir" aria-label="Mensagem para o Bup"><button class="send" type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form></section>
+</div></main>
+<script src="script.js"></script>
+<script>
+(()=>{
+const $=s=>document.querySelector(s),box=$('#box'),pet=$('#pet'),log=$('#log'),inp=$('#t'),lab=$('#mood');
+const NOME={feliz:'feliz',bravo:'bravo',dormindo:'dormindo',triste:'triste',amando:'apaixonado',surpreso:'surpreso',rindo:'rindo',pensando:'pensando'};
+const FIXO=['feliz','bravo','dormindo'],ACORDA=/acord|desperta|levanta|bom dia/;
+const n=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''),R=a=>a[Math.random()*a.length|0];
+let mood='feliz',rest='feliz',hist=[],busy=false,hold,idle,cur,ty,anger=0;
+
+function show(m){mood=m;box.dataset.mood=m;pet.querySelectorAll('.x').forEach(g=>g.classList.toggle('on',g.classList.contains(m)));lab.textContent='Bup está '+NOME[m]}
+function set(m,ms){clearTimeout(hold);if(FIXO.includes(m))rest=m;show(m);if(!FIXO.includes(m))hold=setTimeout(()=>show(rest),ms||3500)}
+function add(role,txt){const e=document.createElement('div');e.className='m '+role;e.textContent=txt;log.append(e);while(log.children.length>40)log.firstChild.remove();log.scrollTop=log.scrollHeight;return e}
+function say(txt){if(cur)cur.el.textContent=cur.txt;clearInterval(ty);const el=add('b','');cur={el,txt};let i=0;ty=setInterval(()=>{el.textContent=txt.slice(0,++i);log.scrollTop=log.scrollHeight;if(i>=txt.length)clearInterval(ty)},22)}
+
+/* Resposta local, usada quando a API do Grok não está disponível */
+function local(msg){
+  const t=n(msg),has=r=>r.test(t);
+  if(has(/me matar|suicid|quero morrer|me cortar/))return{mood:'triste',reply:'Ei, isso me preocupa. Você não está sozinho: fale com alguém de confiança. No Brasil, o CVV atende no 188, a qualquer hora.'};
+  if(has(ACORDA))return rest==='dormindo'?{mood:'surpreso',reply:'Hã? Ah, é você! Já tô acordado.'}:{mood:'feliz',reply:'Eu já tô acordado, olha só!'};
+  if(has(/dorm|sono|boa noite|descansa/))return{mood:'dormindo',reply:'Tá bom... vou dormir um pouquinho. Boa noite... zzz'};
+  if(has(/desculp|perdao|foi mal/)){const b=anger;anger=0;return b?{mood:'feliz',reply:'Hmm... tá bom, eu perdoo. Mas não faz mais isso, tá?'}:{mood:'feliz',reply:'Desculpa por quê? Eu nem fiquei bravo!'}}
+  if(has(/\b(burr[oa]|idiota|imbecil|estupid[oa]|babaca|otari[oa]|trouxa|inutil|lixo|feio|feia|chat[oa]|bosta|merda|odeio|fdp|vtnc)\b|cala a boca/)){anger++;return{mood:'bravo',reply:anger>=3?'CHEGA! Só volto a falar com você quando pedir desculpa.':anger==2?'Eu tô ficando bravo de verdade, hein!':'Ei! Isso não foi legal.'}}
+  if(anger>=3)return{mood:'bravo',reply:R(['Hmpf.','Não tô falando com você.','Peça desculpa primeiro.'])};
+  if(has(/te amo|amo voce|fofo|fofinh|lindo|incrivel|parabens|o melhor/))return{mood:'amando',reply:R(['Aaah, para, eu fico todo vermelho!','Eu também gosto de você!'])};
+  if(has(/piada/))return{mood:'rindo',reply:R(['Por que o computador foi ao médico? Porque estava com vírus!','O que o zero disse pro oito? Belo cinto!'])};
+  if(has(/triste|chorando|sozinho|saudade/))return{mood:'triste',reply:'Poxa, sinto muito. Eu fico aqui com você.'};
+  if(has(/kkk|haha|rsrs|engracad/))return{mood:'rindo',reply:'Hahaha! Agora eu também tô rindo!'};
+  if(has(/\b(oi|ola|eae|opa|e ai)\b/))return{mood:'feliz',reply:R(['Oi! Que bom te ver por aqui!','Eaí! Eu tava te esperando.'])};
+  if(has(/\?/))return{mood:'pensando',reply:'Hmmm... boa pergunta. Deixa eu pensar um pouco.'};
+  return{mood:'feliz',reply:R(['Hmm, conta mais!','Entendi! Fala mais.','Haha, tá bom.'])};
+}
+
+async function ask(msg){
+  const r=await fetch('/api/bup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,history:hist.slice(-10)}),signal:AbortSignal.timeout(25000)});
+  let d={};try{d=await r.json()}catch(e){}
+  if(!r.ok||!d.reply){const e=new Error(d.error||('http '+r.status));e.detail=d.detail||'';throw e}
+  return d;
+}
+let avisou=false;
+function aviso(e){
+  console.warn('Bup/API:',e.message,e.detail||'');
+  if(avisou)return;avisou=true;
+  add('s','Não consegui falar com a IA ('+(e.name==='TimeoutError'?'tempo esgotado':e.message||'erro')+'). Estou respondendo no modo simples.');
+}
+
+async function send(txt){
+  txt=txt.trim().slice(0,300);if(!txt||busy)return;busy=true;clearTimeout(idle);
+  add('u',txt);inp.value='';
+  const w=add('b','...');w.classList.add('dots');
+  if(rest!=='dormindo')show('pensando');
+  let out;
+  if(rest==='dormindo'&&!ACORDA.test(n(txt)))out={mood:'dormindo',reply:R(['Zzz...','Zzz... mais cinco minutinhos...','(O Bup está dormindo. Diga "acorda" para chamar ele.)'])};
+  else try{out=await ask(txt)}catch(e){aviso(e);out=local(txt)}
+  if(!NOME[out.mood])out.mood='feliz';
+  w.remove();set(out.mood);say(out.reply);
+  hist.push({role:'user',content:txt},{role:'assistant',content:out.reply,mood:out.mood});hist=hist.slice(-12);
+  idle=setTimeout(()=>{if(rest==='bravo'){anger=0;set('feliz');say('Já passou... mas não faz de novo.');hist.push({role:'assistant',content:'Já passou, não estou mais bravo.',mood:'feliz'})}},30000);
+  busy=false;
+}
+
+$('#f').addEventListener('submit',e=>{e.preventDefault();send(inp.value)});
+pet.addEventListener('click',()=>{
+  if(busy)return;
+  if(rest==='dormindo'){rest='feliz';clearTimeout(hold);show('bravo');hold=setTimeout(()=>show('feliz'),2500);say('Ei! Eu tava dormindo!');hist.push({role:'assistant',content:'Ei! Eu tava dormindo!',mood:'bravo'})}
+  else if(rest==='bravo')say('Hmpf. Não encosta em mim.');
+  else{set('rindo',2500);say(R(['Hihi, cócegas!','Para, eu tenho cócegas!']))}
+});
+show('feliz');say('Oi! Eu sou o Bup. Converse comigo e veja a minha cara mudar.');
+})();
+</script></body></html>
