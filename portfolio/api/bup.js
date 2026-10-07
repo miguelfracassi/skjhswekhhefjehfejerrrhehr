@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
   const key = process.env.GEMINI_API_KEY;
 
   // Abrir /api/bup no navegador mostra se a função existe e se a chave foi configurada.
-  if (req.method === 'GET') return res.status(200).json({ ok: true, hasKey: !!key, model: process.env.GEMINI_MODEL || 'gemini-2.5-flash' });
+  if (req.method === 'GET') return res.status(200).json({ ok: true, hasKey: !!key, model: process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite' });
   if (req.method !== 'POST') return res.status(405).json({ error: 'method' });
   if (!key) return res.status(500).json({ error: 'GEMINI_API_KEY não configurada' });
 
@@ -46,12 +46,13 @@ module.exports = async (req, res) => {
   const contents = [...past, { role: 'user', parts: [{ text: message }] }];
 
   // Tenta o modelo configurado e, se o Google disser que ele não existe ou não aceita o pedido, o próximo.
-  const models = [...new Set([process.env.GEMINI_MODEL, 'gemini-2.5-flash', 'gemini-2.5-flash-lite'].filter(Boolean))];
+  const models = [...new Set([process.env.GEMINI_MODEL, 'gemini-3.1-flash-lite', 'gemini-3.5-flash', 'gemini-3.6-flash', 'gemini-2.5-flash-lite'].filter(Boolean))];
   let last = { error: 'falha' };
 
   for (const model of models) {
-    const generationConfig = { responseMimeType: 'application/json', temperature: 1, maxOutputTokens: 300 };
-    if (model.includes('2.5-flash') && !model.includes('lite')) generationConfig.thinkingConfig = { thinkingBudget: 0 };
+    // Modelos 3.x gastam tokens "pensando", então o limite é maior para o JSON não ser cortado.
+    const generationConfig = { responseMimeType: 'application/json', temperature: 1, maxOutputTokens: 1024 };
+    if (model.startsWith('gemini-2.5-flash') && !model.includes('lite')) generationConfig.thinkingConfig = { thinkingBudget: 0 };
 
     let r;
     try {
